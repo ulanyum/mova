@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:mova/pages/home_page.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -11,27 +12,35 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  bool checkboxdeger = true;
+  bool checkboxdeger = false;
+  String email = "hasan@hasan.com";
+  String sifre = "1234";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 25, 26, 32),
+          elevation: 0,
+        ),
         body: Container(
           width: double.infinity,
           color: Color.fromARGB(255, 25, 26, 32),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 color: Color.fromARGB(255, 25, 26, 32),
               ),
               SizedBox(
-                height: 50,
+                height: 30,
               ),
               Image.asset(
                 "images/pngwing.png",
-                height: 160,
-                width: 160,
+                height: 120,
+                width: 120,
+              ),
+              SizedBox(
+                height: 10,
               ),
               Text(
                 "Create your account",
@@ -52,14 +61,18 @@ class _CreateAccountState extends State<CreateAccount> {
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Color.fromARGB(255, 32, 34, 42),
-                            icon: Icon(Icons.mail, color: Colors.white),
+                            prefixIcon: Icon(
+                              Icons.mail,
+                              color: Color.fromARGB(255, 159, 159, 158),
+                            ),
                             labelText: 'Email',
-                            labelStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                              color: Color.fromARGB(255, 159, 159, 158),
+                            ),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20))),
                         onSaved: (String? value) {
-                          // This optional block of code can be used to
-                          // code when the user saves the form.
+                          email != value;
                         },
                         validator: (String? value) {
                           return (value != null && value.contains('@'))
@@ -77,19 +90,18 @@ class _CreateAccountState extends State<CreateAccount> {
                             fillColor: Color.fromARGB(255, 32, 34, 42),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            icon: Icon(
+                            prefixIcon: Icon(
                               Icons.lock,
-                              color: Colors.white,
+                              color: Color.fromARGB(255, 159, 159, 158),
                             ),
                             labelText: 'Password',
                             labelStyle: TextStyle(
-                              color: Colors.white,
+                              color: Color.fromARGB(255, 159, 159, 158),
                             )
                             // iconColor: Colors.white),
                             ),
                         onSaved: (String? value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
+                          sifre != value;
                         },
                         validator: (String? value) {
                           return (value != null && value.contains('@'))
@@ -109,7 +121,13 @@ class _CreateAccountState extends State<CreateAccount> {
                     activeColor: Color.fromARGB(255, 240, 6, 6),
                     title: Text(
                       "Remember me",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Color.fromARGB(
+                        255,
+                        159,
+                        159,
+                        158,
+                      )),
                     ),
                     controlAffinity: ListTileControlAffinity.leading,
                     value: checkboxdeger,
@@ -122,23 +140,41 @@ class _CreateAccountState extends State<CreateAccount> {
               SizedBox(
                   height: 50,
                   width: 400,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 240, 6, 6),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(27))),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CreateAccount(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Sign up",
-                        style: TextStyle(fontSize: 20),
-                      ))),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 30, right: 30),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 240, 6, 6),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(27))),
+                        onPressed: () {
+                          if (_formkey.currentState!.validate()) {
+                            _formkey.currentState!.save();
+                            if (email == "hasan@hasan.com" && sifre == "1234") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ),
+                              );
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Hata"),
+                                      content: Text("Kullanıcı Bilgileriniz Yanlış"),
+                                      actions: [MaterialButton(child: Text("Geri Dön"), onPressed: () => Navigator.pop(context))],
+                                    );
+                                  });
+                            }
+                          }
+                        },
+                        child: Text(
+                          "Sign up",
+                          style: TextStyle(fontSize: 20),
+                        )),
+                  )),
               Row(children: <Widget>[
                 Expanded(
                   child: new Container(
@@ -148,10 +184,10 @@ class _CreateAccountState extends State<CreateAccount> {
                         height: 36,
                       )),
                 ),
-                Text(
-                  "or contiune with",
-                  style: TextStyle(color: Colors.white),
-                ),
+                Text("or contiune with",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 159, 159, 158),
+                    )),
                 Expanded(
                   child: new Container(
                       margin: const EdgeInsets.only(left: 20.0, right: 10.0),
@@ -196,6 +232,9 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                               color: Color.fromARGB(255, 240, 6, 6)))),
                 ],
+              ),
+              SizedBox(
+                height: 15,
               )
             ],
           ),
